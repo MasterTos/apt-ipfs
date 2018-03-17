@@ -27,9 +27,9 @@ msg(){
   esac
 
   if [ -z "$3" ] && [ "$2" != "warning" ]; then
-    echo -e "${msg_options[@]}" "${aptfast_prefix}${beginColor}$1${endColor}"
+    echo -e "${msg_options[@]}" "${aptipfs_prefix}${beginColor}$1${endColor}"
   else
-    echo -e "${msg_options[@]}" "${aptfast_prefix}${beginColor}$1${endColor}" >&2
+    echo -e "${msg_options[@]}" "${aptipfs_prefix}${beginColor}$1${endColor}" >&2
   fi
 }
 
@@ -76,8 +76,8 @@ TMP__MAXCONPERSRV="${MAXCONPERSRV-${TMP_RANDOM}}"
 TMP__SPLITCON="${SPLITCON-${TMP_RANDOM}}"
 TMP__MINSPLITSZ=${MINSPLITSZ-${TMP_RANDOM}}
 TMP__PIECEALGO=${PIECEALGO-${TMP_RANDOM}}
-TMP_aptfast_prefix="${aptfast_prefix-${TMP_RANDOM}}"
-TMP_APT_FAST_TIMEOUT="${APT_FAST_TIMEOUT-${TMP_RANDOM}}"
+TMP_aptipfs_prefix="${aptipfs_prefix-${TMP_RANDOM}}"
+TMP_APT_IPFS_TIMEOUT="${APT_IPFS_TIMEOUT-${TMP_RANDOM}}"
 TMP_VERBOSE_OUTPUT="${VERBOSE_OUTPUT-${TMP_RANDOM}}"
 TMP_ftp_proxy="${ftp_proxy-${TMP_RANDOM}}"
 TMP_http_proxy="${http_proxy-${TMP_RANDOM}}"
@@ -99,8 +99,8 @@ if [ "$root" = 1 ] && [ "$UID" != 0 ]; then
             _SPLITCON="$TMP__SPLITCON" \
             _MINSPLITSZ="$TMP__MINSPLITSZ" \
             _PIECEALGO="$TMP__PIECEALGO" \
-            aptfast_prefix="$TMP_aptfast_prefix" \
-            APT_FAST_TIMEOUT="$TMP_APT_FAST_TIMEOUT" \
+            aptipfs_prefix="$TMP_aptipfs_prefix" \
+            APT_IPFS_TIMEOUT="$TMP_APT_IPFS_TIMEOUT" \
             VERBOSE_OUTPUT="$TMP_VERBOSE_OUTPUT" \
             ftp_proxy="$TMP_ftp_proxy" \
             http_proxy="$TMP_http_proxy" \
@@ -122,8 +122,8 @@ LCK_FD=99
 _APTMGR=apt-get
 eval "$(apt-config shell APTCACHE Dir::Cache::archives/d)"
 # Check if APT config option Dir::Cache::archives::apt-ipfs-partial is set.
-eval "$(apt-config shell apt_fast_partial Dir::Cache::archives::apt-ipfs-partial/d)"
-if [ -z "$apt_fast_partial" ]; then
+eval "$(apt-config shell apt_ipfs_partial Dir::Cache::archives::apt-ipfs-partial/d)"
+if [ -z "$apt_ipfs_partial" ]; then
   eval "$(apt-config -o Dir::Cache::archives::apt-ipfs-partial=apt-ipfs shell DLDIR Dir::Cache::archives::apt-ipfs-partial/d)"
 else
   eval "$(apt-config shell DLDIR Dir::Cache::archives::apt-ipfs-partial/d)"
@@ -138,8 +138,8 @@ _MINSPLITSZ="1M"
 _PIECEALGO="default"
 
 # Prefix in front of apt-ipfs output:
-aptfast_prefix=
-# aptfast_prefix="$(date '+%b %_d %T.%N') apt-ipfs: "
+aptipfs_prefix=
+# aptipfs_prefix="$(date '+%b %_d %T.%N') apt-ipfs: "
 
 # Set color variables.
 cGreen='\e[0;32m'
@@ -149,7 +149,7 @@ endColor='\e[0m'
 
 # Set timout value for apt-ipfs download confirmation dialog.
 # Value is in seconds.
-APT_FAST_TIMEOUT=60
+APT_IPFS_TIMEOUT=60
 
 # Ask for download confirmation if unset
 DOWNLOADBEFORE=
@@ -185,8 +185,8 @@ https_proxy=
 [ "$TMP__SPLITCON" = "$TMP_RANDOM" ] || _SPLITCON="$TMP__SPLITCON"
 [ "$TMP__MINSPLITSZ" = "$TMP_RANDOM" ] || _MINSPLITSZ="$TMP__MINSPLITSZ"
 [ "$TMP__PIECEALGO" = "$TMP_RANDOM" ] || _PIECEALGO="$TMP__PIECEALGO"
-[ "$TMP_aptfast_prefix" = "$TMP_RANDOM" ] || aptfast_prefix="$TMP_aptfast_prefix"
-[ "$TMP_APT_FAST_TIMEOUT" = "$TMP_RANDOM" ] || APT_FAST_TIMEOUT="$TMP_APT_FAST_TIMEOUT"
+[ "$TMP_aptipfs_prefix" = "$TMP_RANDOM" ] || aptipfs_prefix="$TMP_aptipfs_prefix"
+[ "$TMP_APT_IPFS_TIMEOUT" = "$TMP_RANDOM" ] || APT_IPFS_TIMEOUT="$TMP_APT_IPFS_TIMEOUT"
 [ "$TMP_VERBOSE_OUTPUT" = "$TMP_RANDOM" ] || VERBOSE_OUTPUT="$TMP_VERBOSE_OUTPUT"
 [ "$TMP_ftp_proxy" = "$TMP_RANDOM" ] || ftp_proxy="$TMP_ftp_proxy"
 [ "$TMP_http_proxy" = "$TMP_RANDOM" ] || http_proxy="$TMP_http_proxy"
@@ -200,7 +200,7 @@ if [ ! -t 1 ]; then
   cBlue=
   endColor=
   #FIXME: Time not updated.
-  [ -z "$aptfast_prefix" ] && aptfast_prefix="[apt-ipfs $(date +"%T")]"
+  [ -z "$aptipfs_prefix" ] && aptipfs_prefix="[apt-ipfs $(date +"%T")]"
 fi
 
 
@@ -401,7 +401,7 @@ display_downloadfile(){
         pkg="$(echo "$line" | cut -d' ' -f1)"
         ver="$(echo "$line" | cut -d' ' -f2)"
         size="$(echo "$line" | cut -d' ' -f3)"
-        printf '%s%-40s %-20s %10s\n' "$aptfast_prefix" "$pkg" "$ver" "$size"
+        printf '%s%-40s %-20s %10s\n' "$aptipfs_prefix" "$pkg" "$ver" "$size"
     done <<<"$(echo -e "$DOWNLOAD_DISPLAY" | sort "${DISPLAY_SORT_OPTIONS[@]}")"
   fi
   msg "Download size: $(echo "$DOWNLOAD_SIZE" | numfmt --to=iec-i --suffix=B)" "normal"
@@ -515,7 +515,7 @@ if [ "$option" == "install" ]; then
     msg "Do you want to download the packages? [Y/n] " "question"
 
     while ((!updsys)); do
-      read -r -sn1 -t "$APT_FAST_TIMEOUT" answer || { msg; msg "Timed out." "warning"; exit 1; }
+      read -r -sn1 -t "$APT_IPFS_TIMEOUT" answer || { msg; msg "Timed out." "warning"; exit 1; }
       case "$answer" in
         [JjYy])    result=1; updsys=1 ;;
         [Nn])      result=0; updsys=1 ;;
@@ -539,7 +539,7 @@ if [ "$option" == "install" ]; then
 
         cd "$DLDIR" &>/dev/null || exit 1
 
-        eval "${_DOWNLOADER}" | sed "s/^/${aptfast_prefix}/" # execute downloadhelper command
+        eval "${_DOWNLOADER}" | sed "s/^/${aptipfs_prefix}/" # execute downloadhelper command
         if [ "$(find "$DLDIR" -printf . | wc -c)" -gt 1 ]; then
           # Move all packages to the apt install directory by force to ensure
           # already existing debs which may be incomplete are replaced
@@ -576,7 +576,7 @@ elif [ "$option" == "download" ]; then
 
   if [ -f "$DLLIST" ] && [ "$(wc -l "$DLLIST" | cut -d' ' -f1)" -gt 1 ]; then
     display_downloadfile
-    eval "${_DOWNLOADER}" | sed "s/^/${aptfast_prefix}/"
+    eval "${_DOWNLOADER}" | sed "s/^/${aptipfs_prefix}/"
   fi
 
   if [ "$_APTMGR" == "aptitude" ]; then
@@ -594,7 +594,7 @@ elif [ "$option" == "source" ]; then
 
   if [ -f "$DLLIST" ] && [ "$(wc -l "$DLLIST" | cut -d' ' -f1)" -gt 1 ]; then
     display_downloadfile
-    eval "${_DOWNLOADER}" | sed "s/^/${aptfast_prefix}/"
+    eval "${_DOWNLOADER}" | sed "s/^/${aptipfs_prefix}/"
   fi
   # We use APT manager here to provide more verbose output. This method is
   # slightly slower then extractiong packages manually after download but also

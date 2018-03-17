@@ -7,10 +7,10 @@
 .\" Public License as published by the Free Software Foundation; either
 .\" version 3 of the License, or (at your option) any later version.
 .\"
-.TH "APT\-FAST.CONF" "5" "2017-11-20" "apt\-fast 1.9" "apt\-fast Manual"
+.TH "APT\-IPFS.CONF" "5" "2017-11-20" "apt\-ipfs 1.9" "apt\-ipfs Manual"
 .SH "NAME"
 .LP
-apt\-fast.conf \- configuration file for \fBapt\-fast\fR(5)
+apt\-ipfs.conf \- configuration file for \fBapt\-ipfs\fR(5)
 .SH "SYNOPSIS"
 Configuration file is sourced by \fBbash\fR(1) to load configuration items, so
 use '#' character to start comments. Each configuration item must directly
@@ -19,7 +19,7 @@ followed by '=' character, e.g.: _APTMGR=apt-get
 It is not recommended to load or execute custom functions.
 .SH "DESCRIPTION"
 .LP
-/etc/apt-ipfs.conf is the configuration file for \fBapt\-fast\fR(5).
+/etc/apt-ipfs.conf is the configuration file for \fBapt\-ipfs\fR(5).
 .TP
 \fB_APTMGR\fR
 Package manager to perform actions with. You may set absolute path to manager.
@@ -27,7 +27,7 @@ Package manager to perform actions with. You may set absolute path to manager.
 Default: \fIapt\-get\fR
 .TP
 \fBDOWNLOADBEFORE\fR
-Enable item to suppress \fBapt\-fast\fR(5) confirmation dialog and download
+Enable item to suppress \fBapt\-ipfs\fR(5) confirmation dialog and download
 packages directly. 'Enable' means you can set any value to this configuration
 item, e.g.: DOWNLOADBEFORE=true
 .br
@@ -127,7 +127,7 @@ Dir::Cache::archives, see also \fBapt.conf\fR(5).
 Default: '/var/cache/apt/archives'
 .TP
 \fBcGreen\fR
-Set specific terminal color. Automatically disabled when \fBapt\-fast\fR(5) is
+Set specific terminal color. Automatically disabled when \fBapt\-ipfs\fR(5) is
 not executed in terminal.
 .br
 Default: '\\e[0;32m]'
@@ -147,7 +147,7 @@ See \fBcGreen\fR item. This color resets color to default one.
 .br
 Default: '\\e[0m'
 .TP
-\fBAPT_FAST_TIMEOUT\fR
+\fBAPT_IPFS_TIMEOUT\fR
 Time in seconds before apt-ipfs download confirmation dialog times out.
 .br
 Default: 60
@@ -158,7 +158,7 @@ Before download confirmation display aria2 download file if this variable is set
 Default: unset
 .SH "FILES"
 .TP
-/etc/apt\-fast.conf
+/etc/apt\-ipfs.conf
 Configuration file.
 .TP
 /tmp/apt-ipfs.list
@@ -166,7 +166,7 @@ Temporary download list file. Configuration item: \fBDLLIST\fR
 .TP
 /var/cache/apt/apt-file/
 Temporary download location where download accelerator retrieves packages
-before \fBapt\-fast\fR(8) moves them to package cache. Configuration item:
+before \fBapt\-ipfs\fR(8) moves them to package cache. Configuration item:
 \fBDLDIR\fR
 .SH "SEE ALSO"
 .LP

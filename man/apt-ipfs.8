@@ -7,23 +7,23 @@
 .\" Public License as published by the Free Software Foundation; either
 .\" version 3 of the License, or (at your option) any later version.
 .\"
-.TH "APT\-FAST" "8" "2017-11-20" "apt\-fast 1.9" "apt\-fast Manual"
+.TH "APT\-IPFS" "8" "2017-11-20" "apt\-ipfs 1.9" "apt\-ipfs Manual"
 .SH "NAME"
 .LP
-apt\-fast \- shellscript wrapper for apt\-get or aptitude to speed up downloads
+apt\-ipfs \- shellscript wrapper for apt\-get or aptitude to speed up downloads
 .SH "SYNOPSIS"
 .LP
-\fBapt\-fast\fR [apt\-get options and arguments]
+\fBapt\-ipfs\fR [apt\-get options and arguments]
 .br
-\fBapt\-fast\fR [aptitude options and arguments]
+\fBapt\-ipfs\fR [aptitude options and arguments]
 .br
-\fBapt\-fast\fR { { \fIinstall\fP | \fIupgrade\fP | \fIdist-upgrade\fP |
+\fBapt\-ipfs\fR { { \fIinstall\fP | \fIupgrade\fP | \fIdist-upgrade\fP |
 \fIfull-upgrade\fP | \fIbuild-dep\fP | \fIdownload\fP | \fIsource\fP }
 [ \-y | \-\-yes | \-\-assume\-yes | \-\-assume\-no ] <package1> <package2> ... |
 \fIclean\fP }
 .SH "DESCRIPTION"
 .LP
-\fBapt\-fast\fR is a shellscript wrapper for apt\-get or aptitude that can
+\fBapt\-ipfs\fR is a shellscript wrapper for apt\-get or aptitude that can
 drastically improve APT download times by downloading packages in parallel,
 with multiple connections per package.
 .br
@@ -35,7 +35,7 @@ with \fB_APTMGR\fR configuration item. See \fBapt-ipfs.conf\fR(5) for detailed
 description of configuration items.
 .LP
 Commands listed here use download accelerator to retrieve new packages or
-influence \fBapt\-fast\fR in different ways. See documentation of selected
+influence \fBapt\-ipfs\fR in different ways. See documentation of selected
 package manager to get overview of all commands available.
 .TP
 \fBinstall\fR <\fIpackage1\fP> <\fIpackage2\fP> ...
@@ -72,7 +72,7 @@ Clean package cache (configuration item \fBAPTCACHE\fR) and temporary download
 directory (configuration item \fBDLDIR\fR). Also remove temporary download list
 file (configuration item \fBDLLIST\fR).
 .SH "OPTIONS"
-Options listed here influence \fBapt\-fast\fR behavior. See
+Options listed here influence \fBapt\-ipfs\fR behavior. See
 documentation of selected package manager to get overview of all options
 available.
 .LP
@@ -86,15 +86,15 @@ Automatic "no" to all prompts. Unsets \fBDOWNLOADBEFORE\fR configuration
 item.
 .SH "FILES"
 .TP
-/etc/apt\-fast.conf
-Configuration file. See \fBapt\-fast.conf\fR(5) for detailed description.
+/etc/apt\-ipfs.conf
+Configuration file. See \fBapt\-ipfs.conf\fR(5) for detailed description.
 .TP
 /tmp/apt-ipfs.list
 Temporary download list file. Configuration item: \fBDLLIST\fR
 .TP
 /var/cache/apt/apt-file/
 Temporary download location where download accelerator retrieves packages
-before \fBapt\-fast\fR moves them to package cache. Configuration item:
+before \fBapt\-ipfs\fR moves them to package cache. Configuration item:
 \fBDLDIR\fR
 .SH "BUGS"
 Use Launchpad bug tracker to report package related bugs (please add debconf
