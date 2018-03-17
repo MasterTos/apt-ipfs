@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-./apt-ipfs remove zurl
+./apt-ipfs remove -y zurl
 
 rm -f /var/cache/apt/archives/zurl_1.5.1-1build1_amd64.deb
 rm -f /var/cache/apt/archives/apt-ipfs/*
