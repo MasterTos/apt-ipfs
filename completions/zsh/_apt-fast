@@ -1,6 +1,6 @@
-#compdef apt-fast
+#compdef apt-ipfs
 
-# Debian apt-fast(8) zsh completion.
+# Debian apt-ipfs(8) zsh completion.
 # Copy of zsh (4.3.17-1) _apt-get function from _apt completion.
 
 # usage: _apt_arguments funcname option-spec... -- rest-regex
@@ -382,8 +382,8 @@ _apt_consume_long () {
   return 0
 }
 
-_apt-fast () {
-  _apt_arguments _apt-fast_sm \
+_apt-ipfs () {
+  _apt_arguments _apt-ipfs_sm \
     -h,--help:bool \
     -v,--version:bool \
     -q,--quiet,--silent:intlevel \
@@ -436,12 +436,12 @@ _apt-fast () {
     /$'unmarkauto\0'/ /$'[^\0]#\0'/ ':packages::_deb_packages "$expl_packages[@]" installed' \# \| \
     /"[]"/  ':argument-1::compadd "$expl_action[@]" update upgrade install remove purge dist-upgrade dselect-upgrade clean autoclean changelog check source build-dep autoremove help markauto unmarkauto'
 
-  _apt-fast () {
+  _apt-ipfs () {
     local expl_action expl_packages
     _description actions expl_action 'action'
     _description packages expl_packages 'package'
-    _apt-fast_sm
+    _apt-ipfs_sm
   }
 }
 
-_apt-fast "$@"
+_apt-ipfs "$@"

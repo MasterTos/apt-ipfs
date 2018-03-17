@@ -1,5 +1,5 @@
 '\"
-.\" Man page for apt-fast
+.\" Man page for apt-ipfs
 .\"
 .\" Copyright: 2012, 2017 Dominique Lasserre <lasserre.d@gmail.com>
 .\"
@@ -31,7 +31,7 @@ It uses \fBaria2c\fR(1) as default download accelerator.
 .LP
 For every command or option you can use either \fBapt\-get\fR(8) or
 \fBaptitude\fR(1) syntax, depending which package manager you have selected
-with \fB_APTMGR\fR configuration item. See \fBapt-fast.conf\fR(5) for detailed
+with \fB_APTMGR\fR configuration item. See \fBapt-ipfs.conf\fR(5) for detailed
 description of configuration items.
 .LP
 Commands listed here use download accelerator to retrieve new packages or
@@ -89,7 +89,7 @@ item.
 /etc/apt\-fast.conf
 Configuration file. See \fBapt\-fast.conf\fR(5) for detailed description.
 .TP
-/tmp/apt-fast.list
+/tmp/apt-ipfs.list
 Temporary download list file. Configuration item: \fBDLLIST\fR
 .TP
 /var/cache/apt/apt-file/
@@ -98,16 +98,16 @@ before \fBapt\-fast\fR moves them to package cache. Configuration item:
 \fBDLDIR\fR
 .SH "BUGS"
 Use Launchpad bug tracker to report package related bugs (please add debconf
-related information with 'debconf-show apt-fast'):
+related information with 'debconf-show apt-ipfs'):
 .br
-https://bugs.launchpad.net/apt-fast/+filebug
+https://bugs.launchpad.net/apt-ipfs/+filebug
 .LP
 To report bugs upstream use GitHub issue tracker:
 .br
-https://github.com/ilikenwf/apt-fast/issues/new
+https://github.com/ilikenwf/apt-ipfs/issues/new
 .SH "SEE ALSO"
 .LP
-\fBapt-fast.conf\fR(5)
+\fBapt-ipfs.conf\fR(5)
 .br
 \fBapt\-get\fR(8),
 \fBaptitude\fR(8),

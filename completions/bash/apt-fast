@@ -1,8 +1,8 @@
-# Debian apt-fast(8) completion.
+# Debian apt-ipfs(8) completion.
 # Copy of Ubuntu 10.04 _apt_get function from apt completion. Merged with 12.04
 # changes but preserve compatibility. _apt_get function renamed to _apt_fast.
 
-have apt-fast &&
+have apt-ipfs &&
 _apt_fast()
 {
     local cur prev special i
@@ -74,7 +74,7 @@ _apt_fast()
 
     return 0
 } &&
-complete -F _apt_fast "$filenames" apt-fast
+complete -F _apt_fast "$filenames" apt-ipfs
 
 # Local variables:
 # mode: shell-script

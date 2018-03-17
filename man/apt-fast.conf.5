@@ -1,5 +1,5 @@
 '\"
-.\" Man page for apt-fast.conf
+.\" Man page for apt-ipfs.conf
 .\"
 .\" Copyright: 2012, 2017 Dominique Lasserre <lasserre.d@gmail.com>
 .\"
@@ -19,7 +19,7 @@ followed by '=' character, e.g.: _APTMGR=apt-get
 It is not recommended to load or execute custom functions.
 .SH "DESCRIPTION"
 .LP
-/etc/apt-fast.conf is the configuration file for \fBapt\-fast\fR(5).
+/etc/apt-ipfs.conf is the configuration file for \fBapt\-fast\fR(5).
 .TP
 \fB_APTMGR\fR
 Package manager to perform actions with. You may set absolute path to manager.
@@ -93,7 +93,7 @@ Default: default
 Set location of temporary download list file where APT exports URIs of
 downloadable packages.
 .br
-Default: '/tmp/apt-fast.list'
+Default: '/tmp/apt-ipfs.list'
 .TP
 \fB_DOWNLOADER\fR
 Download helper command how to download package URIs stored in \fBDLLIST\fR
@@ -118,7 +118,7 @@ Default: 'aria2c \-\-no-conf \-c \-j ${_MAXNUM} \-x ${_MAXCONPERSRV} \-s ${_SPLI
 \fBDLDIR\fR
 Directory where to download packages with download helper to.
 .br
-Default: '/var/cache/apt/apt-fast'
+Default: '/var/cache/apt/apt-ipfs'
 .TP
 \fBAPTCACHE\fR
 APT package cache directory. Set it to APT configuration items Dir::Cache and
@@ -148,7 +148,7 @@ See \fBcGreen\fR item. This color resets color to default one.
 Default: '\\e[0m'
 .TP
 \fBAPT_FAST_TIMEOUT\fR
-Time in seconds before apt-fast download confirmation dialog times out.
+Time in seconds before apt-ipfs download confirmation dialog times out.
 .br
 Default: 60
 .TP
@@ -161,7 +161,7 @@ Default: unset
 /etc/apt\-fast.conf
 Configuration file.
 .TP
-/tmp/apt-fast.list
+/tmp/apt-ipfs.list
 Temporary download list file. Configuration item: \fBDLLIST\fR
 .TP
 /var/cache/apt/apt-file/
@@ -170,7 +170,7 @@ before \fBapt\-fast\fR(8) moves them to package cache. Configuration item:
 \fBDLDIR\fR
 .SH "SEE ALSO"
 .LP
-\fBapt-fast\fR(8)
+\fBapt-ipfs\fR(8)
 .br
 \fBapt\-get\fR(8),
 \fBaptitude\fR(8),

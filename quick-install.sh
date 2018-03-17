@@ -7,10 +7,10 @@ apt_fast_installation() {
     sudo apt-get install -y aria2
   fi
 
-  wget https://raw.githubusercontent.com/ilikenwf/apt-fast/master/apt-fast -O /usr/local/sbin/apt-fast
-  chmod +x /usr/local/sbin/apt-fast
-  if ! [[ -f /etc/apt-fast.conf ]]; then
-    wget https://raw.githubusercontent.com/ilikenwf/apt-fast/master/apt-fast.conf -O /etc/apt-fast.conf
+  wget https://raw.githubusercontent.com/ilikenwf/apt-ipfs/master/apt-ipfs -O /usr/local/sbin/apt-ipfs
+  chmod +x /usr/local/sbin/apt-ipfs
+  if ! [[ -f /etc/apt-ipfs.conf ]]; then
+    wget https://raw.githubusercontent.com/ilikenwf/apt-ipfs/master/apt-ipfs.conf -O /etc/apt-ipfs.conf
   fi
 }
 

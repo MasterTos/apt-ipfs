@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# apt-fast v1.9
+# apt-ipfs v1.9
 # Use this just like aptitude or apt-get for faster package downloading.
 #
 # Copyright: 2008-2012 Matt Parnell, http://www.mattparnell.com
@@ -114,32 +114,32 @@ fi
 # permissions.
 # We need lock for non-root commands too, because we only have one download
 # list file.
-LCK_FILE="/tmp/apt-fast"
+LCK_FILE="/tmp/apt-ipfs"
 LCK_FD=99
 
 # Set default package manager, APT cache, temporary download dir,
 # temporary download list file, and maximal parallel downloads
 _APTMGR=apt-get
 eval "$(apt-config shell APTCACHE Dir::Cache::archives/d)"
-# Check if APT config option Dir::Cache::archives::apt-fast-partial is set.
-eval "$(apt-config shell apt_fast_partial Dir::Cache::archives::apt-fast-partial/d)"
+# Check if APT config option Dir::Cache::archives::apt-ipfs-partial is set.
+eval "$(apt-config shell apt_fast_partial Dir::Cache::archives::apt-ipfs-partial/d)"
 if [ -z "$apt_fast_partial" ]; then
-  eval "$(apt-config -o Dir::Cache::archives::apt-fast-partial=apt-fast shell DLDIR Dir::Cache::archives::apt-fast-partial/d)"
+  eval "$(apt-config -o Dir::Cache::archives::apt-ipfs-partial=apt-ipfs shell DLDIR Dir::Cache::archives::apt-ipfs-partial/d)"
 else
-  eval "$(apt-config shell DLDIR Dir::Cache::archives::apt-fast-partial/d)"
+  eval "$(apt-config shell DLDIR Dir::Cache::archives::apt-ipfs-partial/d)"
 fi
 # Currently not needed.
 eval "$(apt-config shell LISTDIR Dir::State::lists/d)"
-DLLIST="/tmp/apt-fast.list"
+DLLIST="/tmp/apt-ipfs.list"
 _MAXNUM=5
 _MAXCONPERSRV=10
 _SPLITCON=8
 _MINSPLITSZ="1M"
 _PIECEALGO="default"
 
-# Prefix in front of apt-fast output:
+# Prefix in front of apt-ipfs output:
 aptfast_prefix=
-# aptfast_prefix="$(date '+%b %_d %T.%N') apt-fast: "
+# aptfast_prefix="$(date '+%b %_d %T.%N') apt-ipfs: "
 
 # Set color variables.
 cGreen='\e[0;32m'
@@ -147,7 +147,7 @@ cRed='\e[0;31m'
 cBlue='\e[0;34m'
 endColor='\e[0m'
 
-# Set timout value for apt-fast download confirmation dialog.
+# Set timout value for apt-ipfs download confirmation dialog.
 # Value is in seconds.
 APT_FAST_TIMEOUT=60
 
@@ -161,7 +161,7 @@ VERBOSE_OUTPUT=
 _DOWNLOADER='aria2c --no-conf -c -j ${_MAXNUM} -x ${_MAXCONPERSRV} -s ${_SPLITCON} -i ${DLLIST} --min-split-size=${_MINSPLITSZ} --stream-piece-selector=${_PIECEALGO} --connect-timeout=600 --timeout=600 -m0'
 
 # Load config file.
-CONFFILE="/etc/apt-fast.conf"
+CONFFILE="/etc/apt-ipfs.conf"
 if [ -e "$CONFFILE" ]; then
     source "$CONFFILE"
 fi
@@ -200,14 +200,14 @@ if [ ! -t 1 ]; then
   cBlue=
   endColor=
   #FIXME: Time not updated.
-  [ -z "$aptfast_prefix" ] && aptfast_prefix="[apt-fast $(date +"%T")]"
+  [ -z "$aptfast_prefix" ] && aptfast_prefix="[apt-ipfs $(date +"%T")]"
 fi
 
 
 msg_already_running()
 {
-  msg "apt-fast already running!" "warning"
-  msg "Verify that all apt-fast processes are finished then remove $LCK_FILE.lock and try again." "hint"
+  msg "apt-ipfs already running!" "warning"
+  msg "Verify that all apt-ipfs processes are finished then remove $LCK_FILE.lock and try again." "hint"
 }
 
 # Check if a lock file exists.
@@ -280,13 +280,13 @@ get_uris(){
   elif [ -f "$DLLIST" ]; then
     if ! rm -f -- "$DLLIST" 2>/dev/null && ! touch -- "$DLLIST" 2>/dev/null
     then
-      msg "Unable to write to download file. Try restarting with root permissions or run 'apt-fast clean' first." "warning"
+      msg "Unable to write to download file. Try restarting with root permissions or run 'apt-ipfs clean' first." "warning"
       exit 1
     fi
   fi
 
   # Add header to overwrite file.
-  echo "# apt-fast mirror list: $(date)" > "$DLLIST"
+  echo "# apt-ipfs mirror list: $(date)" > "$DLLIST"
   #NOTE: aptitude doesn't have this functionality, so we use apt-get to get
   #      package URIs.
   case "$_APTMGR" in
@@ -507,7 +507,7 @@ if [ "$option" == "install" ]; then
   get_uris "$@"
 
   [ -t 1 ] && [ -n "$REMOVE_WORKING_MESSAGE" ] && tput cuu 1 && tput el && tput cuu 1
-  # Test /tmp/apt-fast.list file exists and not just the apt-fast comment line.
+  # Test /tmp/apt-ipfs.list file exists and not just the apt-ipfs comment line.
   # Then download all files from the list.
   if [ -f "$DLLIST" ] && [ "$(wc -l "$DLLIST" | cut -d' ' -f1)" -gt 1 ] && [ ! "$DOWNLOADBEFORE" ]; then
     display_downloadfile
@@ -532,7 +532,7 @@ if [ "$option" == "install" ]; then
     # Continue if answer was right or DOWNLOADBEFORE is enabled.
     if ((result)); then
       if [ -s "$DLLIST" ]; then
-        # Test if apt-fast directory is present where we put packages.
+        # Test if apt-ipfs directory is present where we put packages.
         if [ ! -d "$DLDIR" ]; then
           mkdir -p -- "$DLDIR"
         fi
