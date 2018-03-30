@@ -267,8 +267,8 @@ get_mirrors(){
   done
   # No other mirrors found.
   echo "1111 $1" >> ./pkg_info
-  #echo "$1"
-  echo "http://localhost:8080/ipns/Qmaq9qtLoD8k33y25bL3UKLP1Tp8ymsmEu1LxT27hChRYw/ubuntu/pool/universe/z/zurl/zurl_1.5.1-1build1_amd64.deb"
+  echo "$1"
+
 }
 
 # Globals to save package name, version, size and overall size.
