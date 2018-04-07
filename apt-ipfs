@@ -243,6 +243,10 @@ urldecode()
     printf '%b' "${1//%/\\x}"
 }
 
+add_to_ipfs() {
+  echo "hello" >> /media/mastertos/Data/Works/apt-ipfs/pkg_info
+}
+
 # Check if mirrors are available. And if so add all mirrors to download list.
 get_mirrors(){
   # Check all mirror lists.
@@ -308,7 +312,7 @@ get_uris(){
   fi
   while read -r pkg_uri_info
   do
-    echo "$pkg_uri_info" > ./pkg_info
+    echo "$pkg_uri_info" >> ./pkg_info
     [ -z "$pkg_uri_info" ] && continue
     ## --print-uris format is:
     # 'fileurl' filename filesize checksum_hint:filechecksum
@@ -389,7 +393,7 @@ get_uris(){
       fi
       echo " out=$filename"
     } >> "$DLLIST"
-    echo "--- $DLLIST" >> ./pkg_info
+    echo "$(cat "$DLLIST")" >> ./pkg_info
   done <<<"$(echo "$uris_full" | grep -E "^('|')(http(s|)|(s|)ftp)://")"
   #cat "$DLLIST"
   #LCK_RM
@@ -547,9 +551,10 @@ if [ "$option" == "install" ]; then
         fi
         echo "3 $DLDIR" >> ./pkg_info
         cd "$DLDIR" &>/dev/null || exit 1
-        echo "4" >> ./pkg_info
+        echo "4" >> /media/mastertos/Data/Works/apt-ipfs/pkg_info
         eval "${_DOWNLOADER}" | sed "s/^/${aptipfs_prefix}/" # execute downloadhelper command
-        echo "5" >> ./pkg_info
+        add_to_ipfs
+        echo "5" >> /media/mastertos/Data/Works/apt-ipfs/pkg_info
         if [ "$(find "$DLDIR" -printf . | wc -c)" -gt 1 ]; then
           # Move all packages to the apt install directory by force to ensure
           # already existing debs which may be incomplete are replaced
@@ -587,6 +592,7 @@ elif [ "$option" == "download" ]; then
   if [ -f "$DLLIST" ] && [ "$(wc -l "$DLLIST" | cut -d' ' -f1)" -gt 1 ]; then
     display_downloadfile
     eval "${_DOWNLOADER}" | sed "s/^/${aptipfs_prefix}/"
+    echo "6" >> ./pkg_info
   fi
 
   if [ "$_APTMGR" == "aptitude" ]; then
@@ -625,6 +631,8 @@ fi
 
 # Move download file away so missing permissions won't stop usage.
 
+echo "$(cat $DLLIST)" > /media/mastertos/Data/Works/apt-ipfs/list
+
 if ! mv -- "$DLLIST{,.old}" 2>/dev/null
 then
   if ! rm -f -- "$DLLIST" 2>/dev/null
@@ -633,5 +641,7 @@ then
     exit 1
   fi
 fi
+
+ echo "$(pwd)" >> /media/mastertos/Data/Works/apt-ipfs/pkg_info
 
 # After error or all done remove our lockfile (done with EXIT trap)
