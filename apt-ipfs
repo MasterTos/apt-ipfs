@@ -269,6 +269,8 @@ get_ipfs_mirrors(){
         echo "test2 $pkg_url $response" >> ./pkg_info
         echo -e "$pkg_url"
         return 0
+      elif [[ "$response" -eq 404 ]]; then
+        echo "$pkg_url $response" >> ./pkg_info
       fi
       echo "test $pkg_url $response" >> ./pkg_info
     done
