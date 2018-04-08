@@ -1,0 +1,6 @@
+- rename
+- line 385 \'
+- ทำใน get_uris
+- ซิงค์ tree rsync -av -f"+ */" -f"- *" rsync://archive.ubuntu.com/ubuntu ./ipfs/ubuntu
+- ipfs root QmbfKk9XQPKzuuV76B8yHVyJP6twegEE63E8D8CDTDe6c5
+- https://stackoverflow.com/questions/2220301/how-to-evaluate-http-response-codes-from-bash-shell-script
