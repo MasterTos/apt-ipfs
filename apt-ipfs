@@ -138,6 +138,9 @@ _SPLITCON=8
 _MINSPLITSZ="1M"
 _PIECEALGO="default"
 
+#ipfs path
+_IPFS_PATH=ipfs
+
 #ipfs key
 _IPFS_KEY=self
 
@@ -258,12 +261,12 @@ add_to_ipfs() {
       _new_root_hash=$rootpath
       _is_first_round=0
     fi
-    pkg_hash=$(eval "ipfs add $pkgname" | cut -d' ' -f2)
-    _new_root_hash=$(eval ipfs object patch add-link -p $_new_root_hash $uripath $pkg_hash)
+    pkg_hash=$(eval "$_IPFS_PATH add $pkgname" | cut -d' ' -f2)
+    _new_root_hash=$(eval "$_IPFS_PATH object patch add-link -p $_new_root_hash $uripath $pkg_hash")
     _add_success=1
   done < "$ADDLIST"
   if ((_add_success)); then
-     eval "ipfs name publish --key=$_IPFS_KEY $_new_root_hash"
+     eval "$_IPFS_PATH name publish --key=$_IPFS_KEY $_new_root_hash"
   fi
 }
 
