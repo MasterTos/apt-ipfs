@@ -245,10 +245,19 @@ urldecode()
 }
 
 add_to_ipfs() {
+  _is_first_round=1
+  _new_root_hash=''
   while IFS='' read -r rootpath || [[ -n "$line" ]]; do
     read -r uripath
     read -r pkgname
-    echo "Text read from file: $rootpath $uripath $pkgname" >> stdout
+    if ((_is_first_round)); then
+      _new_root_hash=$rootpath
+      _is_first_round=0
+    fi
+    pkg_hash=$(eval "ipfs add $pkgname" | cut -d' ' -f2)
+    _new_root_hash=$(eval ipfs object patch add-link -p $_new_root_hash $uripath $pkg_hash)
+    #ipfs object patch add-link -p /ipns/Qmaq9qtLoD8k33y25bL3UKLP1Tp8ymsmEu1LxT27hChRYw/ test QmaunhHLtmsuKsn1q7gXReejJ78Y1qLvyKMQ9b28vLBLiv
+    echo "$uripath $_new_root_hash" >> stdout
   done < "$ADDLIST"
 }
 
