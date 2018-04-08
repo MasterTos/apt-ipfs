@@ -258,7 +258,19 @@ get_ipfs_mirrors(){
     # Check for all mirrors if URI of $1 is from mirror. If so add all other
     # mirrors to (resmirror) list and break all loops.
     for mirror in "${mirrors[@]}"; do
-      echo "test $uri_path" >> ./pkg_info
+      pkg_url=
+      if [[ "$mirror" == *"/" ]]; then
+        pkg_url="$(echo "$mirror""$uri_path")"
+      else
+        pkg_url="$(echo "$mirror"/"$uri_path")"
+      fi
+      response=$(curl --write-out %{http_code} --head --silent --output /dev/null "$pkg_url")
+      if [[ "$response" -eq 200 ]]; then 
+        echo "test2 $pkg_url $response" >> ./pkg_info
+        echo -e "$pkg_url"
+        return 0
+      fi
+      echo "test $pkg_url $response" >> ./pkg_info
     done
   done
 
