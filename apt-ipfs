@@ -260,7 +260,7 @@ add_to_ipfs() {
     fi
     pkg_hash=$(eval "ipfs add $pkgname" | cut -d' ' -f2)
     _new_root_hash=$(eval ipfs object patch add-link -p $_new_root_hash $uripath $pkg_hash)
-    #ipfs object patch add-link -p /ipns/Qmaq9qtLoD8k33y25bL3UKLP1Tp8ymsmEu1LxT27hChRYw/ test QmaunhHLtmsuKsn1q7gXReejJ78Y1qLvyKMQ9b28vLBLiv
+    _add_success=1
     echo "$uripath $_new_root_hash" >> stdout
   done < "$ADDLIST"
   if ((_add_success)); then
