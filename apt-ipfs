@@ -131,6 +131,7 @@ fi
 # Currently not needed.
 eval "$(apt-config shell LISTDIR Dir::State::lists/d)"
 DLLIST="/tmp/apt-ipfs.list"
+ADDLIST="./ipfs-add.list"
 _MAXNUM=5
 _MAXCONPERSRV=10
 _SPLITCON=8
@@ -244,7 +245,7 @@ urldecode()
 }
 
 add_to_ipfs() {
-  echo "hello" >> /media/mastertos/Data/Works/apt-ipfs/pkg_info
+  eval "ipfs swarm peers"
 }
 
 # Check if ipfs mirror are avaliable.
@@ -270,6 +271,9 @@ get_ipfs_mirrors(){
         echo -e "$pkg_url"
         return 0
       elif [[ "$response" -eq 404 ]]; then
+        echo $(echo "$mirror" | grep -oe "/ipns/.*") >> $ADDLIST
+        echo $uri_path >> $ADDLIST
+        echo $(echo "$uri_path" | rev | cut -d'/' -f 1 | rev) >> $ADDLIST
         echo "$pkg_url $response" >> ./pkg_info
       fi
       echo "test $pkg_url $response" >> ./pkg_info
@@ -625,6 +629,7 @@ elif [ "$option" == "download" ]; then
   if [ -f "$DLLIST" ] && [ "$(wc -l "$DLLIST" | cut -d' ' -f1)" -gt 1 ]; then
     display_downloadfile
     eval "${_DOWNLOADER}" | sed "s/^/${aptipfs_prefix}/"
+    add_to_ipfs
     echo "6" >> ./pkg_info
   fi
 
@@ -671,6 +676,15 @@ then
   if ! rm -f -- "$DLLIST" 2>/dev/null
   then
     msg "Could not clean up download list file." "warning"
+    exit 1
+  fi
+fi
+
+if ! mv -- "$ADDLIST{,.old}" 2>/dev/null
+then
+  if ! rm -f -- "$ADDLIST" 2>/dev/null
+  then
+    msg "Could not clean up add list file." "warning"
     exit 1
   fi
 fi
