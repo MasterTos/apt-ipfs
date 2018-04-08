@@ -1,4 +1,0 @@
-'http://th.archive.ubuntu.com/ubuntu/pool/universe/z/zurl/zurl_1.5.1-1build1_amd64.deb' zurl_1.5.1-1build1_amd64.deb 190010 SHA256:c781bc310f1759ff398614d71a42b9b168beec677dd914bead7dd388ca9f6db2
-mirror http://localhost:8080/ipns/Qmaq9qtLoD8k33y25bL3UKLP1Tp8ymsmEu1LxT27hChRYw/ubuntu
-1111 http://th.archive.ubuntu.com/ubuntu/pool/universe/z/zurl/zurl_1.5.1-1build1_amd64.deb
---- /tmp/apt-ipfs.list
