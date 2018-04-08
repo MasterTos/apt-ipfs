@@ -131,12 +131,15 @@ fi
 # Currently not needed.
 eval "$(apt-config shell LISTDIR Dir::State::lists/d)"
 DLLIST="/tmp/apt-ipfs.list"
-ADDLIST="./ipfs-add.list"
+ADDLIST="/tmp/ipfs-add.list"
 _MAXNUM=5
 _MAXCONPERSRV=10
 _SPLITCON=8
 _MINSPLITSZ="1M"
 _PIECEALGO="default"
+
+#ipfs key
+_IPFS_KEY=self
 
 # Prefix in front of apt-ipfs output:
 aptipfs_prefix=
@@ -247,6 +250,7 @@ urldecode()
 add_to_ipfs() {
   _is_first_round=1
   _new_root_hash=''
+  _add_success=0
   while IFS='' read -r rootpath || [[ -n "$line" ]]; do
     read -r uripath
     read -r pkgname
@@ -259,6 +263,9 @@ add_to_ipfs() {
     #ipfs object patch add-link -p /ipns/Qmaq9qtLoD8k33y25bL3UKLP1Tp8ymsmEu1LxT27hChRYw/ test QmaunhHLtmsuKsn1q7gXReejJ78Y1qLvyKMQ9b28vLBLiv
     echo "$uripath $_new_root_hash" >> stdout
   done < "$ADDLIST"
+  if ((_add_success)); then
+     eval "ipfs name publish --key=$_IPFS_KEY $_new_root_hash"
+  fi
 }
 
 # Check if ipfs mirror are avaliable.
