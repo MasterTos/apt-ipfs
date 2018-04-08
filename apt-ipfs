@@ -245,7 +245,11 @@ urldecode()
 }
 
 add_to_ipfs() {
-  eval "ipfs swarm peers"
+  while IFS='' read -r rootpath || [[ -n "$line" ]]; do
+    read -r uripath
+    read -r pkgname
+    echo "Text read from file: $rootpath $uripath $pkgname" >> stdout
+  done < "$ADDLIST"
 }
 
 # Check if ipfs mirror are avaliable.
