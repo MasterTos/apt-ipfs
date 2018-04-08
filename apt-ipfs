@@ -351,6 +351,24 @@ get_uris(){
     fi
   fi
 
+  if [ ! -d "$(dirname "$ADDLIST")" ]
+  then
+    if ! mkdir -p -- "$(dirname "$ADDLIST")"
+    then
+      msg "Could not create add file to ipfs directory." "warning"
+      exit 1
+    fi
+  elif [ -f "$ADDLIST" ]; then
+    if ! rm -f -- "$ADDLIST" 2>/dev/null && ! touch -- "$ADDLIST" 2>/dev/null
+    then
+      msg "Unable to write to add file to ipfs file. Try restarting with root permissions or run 'apt-ipfs clean' first." "warning"
+      exit 1
+    fi
+  fi
+
+  #create ipfs add list file
+  touch $ADDLIST
+
   # Add header to overwrite file.
   echo "# apt-ipfs mirror list: $(date)" > "$DLLIST"
   #NOTE: aptitude doesn't have this functionality, so we use apt-get to get
