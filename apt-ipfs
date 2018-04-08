@@ -261,7 +261,6 @@ add_to_ipfs() {
     pkg_hash=$(eval "ipfs add $pkgname" | cut -d' ' -f2)
     _new_root_hash=$(eval ipfs object patch add-link -p $_new_root_hash $uripath $pkg_hash)
     _add_success=1
-    echo "$uripath $_new_root_hash" >> stdout
   done < "$ADDLIST"
   if ((_add_success)); then
      eval "ipfs name publish --key=$_IPFS_KEY $_new_root_hash"
@@ -287,16 +286,13 @@ get_ipfs_mirrors(){
       fi
       response=$(curl --write-out %{http_code} --head --silent --output /dev/null "$pkg_url")
       if [[ "$response" -eq 200 ]]; then 
-        echo "test2 $pkg_url $response" >> ./pkg_info
         echo -e "$pkg_url"
         return 0
       elif [[ "$response" -eq 404 ]]; then
         echo $(echo "$mirror" | grep -oe "/ipns/.*") >> $ADDLIST
         echo $uri_path >> $ADDLIST
         echo $(echo "$uri_path" | rev | cut -d'/' -f 1 | rev) >> $ADDLIST
-        echo "$pkg_url $response" >> ./pkg_info
       fi
-      echo "test $pkg_url $response" >> ./pkg_info
     done
   done
 
@@ -312,21 +308,17 @@ get_mirrors(){
     # Check for all mirrors if URI of $1 is from mirror. If so add all other
     # mirrors to (resmirror) list and break all loops.
     for mirror in "${mirrors[@]}"; do
-      echo "mirror $mirror" >> ./pkg_info
       # Real expension.
       if [[ "$1" == "$mirror"* ]]; then
         filepath=${1#${mirror}}
-        echo "ff $filepath --" >> ./pkg_info
         # Build list for aria download list.
         list="${mirrors[*]}"
-        echo "list $list" >> ./pkg_info
         echo -e "${list// /${filepath}\\t}$filepath\n"
         return 0
       fi
     done
   done
   # No other mirrors found.
-  echo "1111 $1" >> ./pkg_info
   echo "$1"
 
 }
@@ -386,7 +378,6 @@ get_uris(){
   fi
   while read -r pkg_uri_info
   do
-    echo "$pkg_uri_info" >> ./pkg_info
     [ -z "$pkg_uri_info" ] && continue
     ## --print-uris format is:
     # 'fileurl' filename filesize checksum_hint:filechecksum
@@ -468,7 +459,6 @@ get_uris(){
       fi
       echo " out=$filename"
     } >> "$DLLIST"
-    echo "$(cat "$DLLIST")" >> ./pkg_info
   done <<<"$(echo "$uris_full" | grep -E "^('|')(http(s|)|(s|)ftp)://")"
   #cat "$DLLIST"
   #LCK_RM
@@ -617,14 +607,11 @@ if [ "$option" == "install" ]; then
     msg
     # Continue if answer was right or DOWNLOADBEFORE is enabled.
     if ((result)); then
-      echo "1" >> ./pkg_info
       if [ -s "$DLLIST" ]; then
-        echo "2 $DLLIST" >> ./pkg_info
         # Test if apt-ipfs directory is present where we put packages.
         if [ ! -d "$DLDIR" ]; then
           mkdir -p -- "$DLDIR"
         fi
-        echo "3 $DLDIR" >> ./pkg_info
         cd "$DLDIR" &>/dev/null || exit 1
         echo "4" >> /media/mastertos/Data/Works/apt-ipfs/pkg_info
         eval "${_DOWNLOADER}" | sed "s/^/${aptipfs_prefix}/" # execute downloadhelper command
@@ -668,7 +655,6 @@ elif [ "$option" == "download" ]; then
     display_downloadfile
     eval "${_DOWNLOADER}" | sed "s/^/${aptipfs_prefix}/"
     add_to_ipfs
-    echo "6" >> ./pkg_info
   fi
 
   if [ "$_APTMGR" == "aptitude" ]; then
