@@ -247,6 +247,24 @@ add_to_ipfs() {
   echo "hello" >> /media/mastertos/Data/Works/apt-ipfs/pkg_info
 }
 
+# Check if ipfs mirror are avaliable.
+get_ipfs_mirrors(){
+  #uri_path = "$(echo "$1" | cut -d '/' -f 4-)"
+  uri_path="$(echo "$1" | cut -d'/' -f4-)"
+  # Check all ipfs mirror lists.
+  for mirrorstr in "${IPFS_MIRRORS[@]}"; do
+    # Build mirrors array from comma separated string.
+    IFS=", " read -r -a mirrors <<< "$mirrorstr"
+    # Check for all mirrors if URI of $1 is from mirror. If so add all other
+    # mirrors to (resmirror) list and break all loops.
+    for mirror in "${mirrors[@]}"; do
+      echo "test $uri_path" >> ./pkg_info
+    done
+  done
+
+  echo $1
+}
+
 # Check if mirrors are available. And if so add all mirrors to download list.
 get_mirrors(){
   # Check all mirror lists.
@@ -386,7 +404,8 @@ get_uris(){
     fi
 
     {
-      get_mirrors "$uri"
+      #get_mirrors "$uri"
+      get_ipfs_mirrors "$uri"
       #echo " dir=$DLDIR"
       if [ -n "$hash_algo" ]; then
         echo " checksum=$hash_algo=$checksum"
