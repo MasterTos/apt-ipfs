@@ -696,7 +696,6 @@ fi
 
 # Move download file away so missing permissions won't stop usage.
 
-echo "$(cat $DLLIST)" > /media/mastertos/Data/Works/apt-ipfs/list
 
 if ! mv -- "$DLLIST{,.old}" 2>/dev/null
 then
