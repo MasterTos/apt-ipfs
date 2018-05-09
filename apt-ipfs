@@ -461,7 +461,7 @@ get_uris(){
       if [ -n "$hash_algo" ]; then
         echo " checksum=$hash_algo=$checksum"
       fi
-      echo " out=$filename"
+      echo " out=$(echo "$uri" | rev | cut -d'/' -f 1 | rev)"
     } >> "$DLLIST"
   done <<<"$(echo "$uris_full" | grep -E "^('|')(http(s|)|(s|)ftp)://")"
   #cat "$DLLIST"
