@@ -289,7 +289,7 @@ get_ipfs_mirrors(){
       fi
       response=$(curl --write-out %{http_code} --head --silent --output /dev/null "$pkg_url")
       if [[ "$response" -eq 200 ]]; then 
-        echo -e "$pkg_url"
+        echo -e "$pkg_url\\t$1"
         return 0
       elif [[ "$response" -eq 404 ]]; then
         echo $(echo "$mirror" | grep -oe "/ipns/.*") >> $ADDLIST
@@ -316,6 +316,7 @@ get_mirrors(){
         filepath=${1#${mirror}}
         # Build list for aria download list.
         list="${mirrors[*]}"
+        echo "$list" >> /media/mastertos/Data/Works/apt-ipfs/pkg_info
         echo -e "${list// /${filepath}\\t}$filepath\n"
         return 0
       fi
@@ -460,7 +461,7 @@ get_uris(){
       if [ -n "$hash_algo" ]; then
         echo " checksum=$hash_algo=$checksum"
       fi
-      echo " out=$filename"
+      echo " out=$(echo "$uri" | rev | cut -d'/' -f 1 | rev)"
     } >> "$DLLIST"
   done <<<"$(echo "$uris_full" | grep -E "^('|')(http(s|)|(s|)ftp)://")"
   #cat "$DLLIST"
@@ -696,7 +697,6 @@ fi
 
 # Move download file away so missing permissions won't stop usage.
 
-echo "$(cat $DLLIST)" > /media/mastertos/Data/Works/apt-ipfs/list
 
 if ! mv -- "$DLLIST{,.old}" 2>/dev/null
 then
