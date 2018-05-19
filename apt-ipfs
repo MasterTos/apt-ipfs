@@ -646,7 +646,7 @@ if [ "$option" == "install" ]; then
         fi
         cd "$DLDIR" &>/dev/null || exit 1
         # echo "4" >> /media/mastertos/Data/Works/apt-ipfs/pkg_info
-        eval "${_DOWNLOADER}" | sed "s/^/${aptipfs_prefix}/" # execute downloadhelper command
+        eval "${_DOWNLOADER}" # execute downloadhelper command
         add_to_ipfs
         # echo "5" >> /media/mastertos/Data/Works/apt-ipfs/pkg_info
         if [ "$(find "$DLDIR" -printf . | wc -c)" -gt 1 ]; then
@@ -686,7 +686,7 @@ elif [ "$option" == "download" ]; then
 
   if [ -f "$DLLIST" ] && [ "$(wc -l "$DLLIST" | cut -d' ' -f1)" -gt 1 ]; then
     display_downloadfile
-    eval "${_DOWNLOADER}" | sed "s/^/${aptipfs_prefix}/"
+    eval "${_DOWNLOADER}"
     add_to_ipfs
   fi
 
@@ -705,7 +705,7 @@ elif [ "$option" == "source" ]; then
 
   if [ -f "$DLLIST" ] && [ "$(wc -l "$DLLIST" | cut -d' ' -f1)" -gt 1 ]; then
     display_downloadfile
-    eval "${_DOWNLOADER}" | sed "s/^/${aptipfs_prefix}/"
+    eval "${_DOWNLOADER}"
   fi
   # We use APT manager here to provide more verbose output. This method is
   # slightly slower then extractiong packages manually after download but also
