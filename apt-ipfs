@@ -168,8 +168,7 @@ VERBOSE_OUTPUT=
 _DOWNLOADER='aria2c --no-conf -c -j ${_MAXNUM} -x ${_MAXCONPERSRV} -s ${_SPLITCON} -i ${DLLIST} --min-split-size=${_MINSPLITSZ} --stream-piece-selector=${_PIECEALGO} --connect-timeout=600 --timeout=600 -m0'
 
 # Load config file.
-#CONFFILE="/etc/apt-ipfs.conf"
-CONFFILE="./apt-ipfs.conf"
+CONFFILE="/etc/apt-ipfs.conf"
 if [ -e "$CONFFILE" ]; then
     source "$CONFFILE"
 fi
@@ -316,7 +315,7 @@ get_mirrors(){
         filepath=${1#${mirror}}
         # Build list for aria download list.
         list="${mirrors[*]}"
-        echo "$list" >> /media/mastertos/Data/Works/apt-ipfs/pkg_info
+        # echo "$list" >> /media/mastertos/Data/Works/apt-ipfs/pkg_info
         echo -e "${list// /${filepath}\\t}$filepath\n"
         return 0
       fi
@@ -617,10 +616,10 @@ if [ "$option" == "install" ]; then
           mkdir -p -- "$DLDIR"
         fi
         cd "$DLDIR" &>/dev/null || exit 1
-        echo "4" >> /media/mastertos/Data/Works/apt-ipfs/pkg_info
+        # echo "4" >> /media/mastertos/Data/Works/apt-ipfs/pkg_info
         eval "${_DOWNLOADER}" | sed "s/^/${aptipfs_prefix}/" # execute downloadhelper command
         add_to_ipfs
-        echo "5" >> /media/mastertos/Data/Works/apt-ipfs/pkg_info
+        # echo "5" >> /media/mastertos/Data/Works/apt-ipfs/pkg_info
         if [ "$(find "$DLDIR" -printf . | wc -c)" -gt 1 ]; then
           # Move all packages to the apt install directory by force to ensure
           # already existing debs which may be incomplete are replaced
@@ -716,6 +715,6 @@ then
   fi
 fi
 
- echo "$(pwd)" >> /media/mastertos/Data/Works/apt-ipfs/pkg_info
+ # echo "$(pwd)" >> /media/mastertos/Data/Works/apt-ipfs/pkg_info
 
 # After error or all done remove our lockfile (done with EXIT trap)
