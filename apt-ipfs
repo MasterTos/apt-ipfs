@@ -168,8 +168,7 @@ VERBOSE_OUTPUT=
 _DOWNLOADER='aria2c --no-conf -c -j ${_MAXNUM} -x ${_MAXCONPERSRV} -s ${_SPLITCON} -i ${DLLIST} --min-split-size=${_MINSPLITSZ} --stream-piece-selector=${_PIECEALGO} --connect-timeout=600 --timeout=600 -m0'
 
 # Load config file.
-#CONFFILE="/etc/apt-ipfs.conf"
-CONFFILE="./apt-ipfs.conf"
+CONFFILE="/etc/apt-ipfs.conf"
 if [ -e "$CONFFILE" ]; then
     source "$CONFFILE"
 fi
