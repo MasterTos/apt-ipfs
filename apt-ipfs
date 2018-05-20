@@ -133,7 +133,7 @@ eval "$(apt-config shell LISTDIR Dir::State::lists/d)"
 DLLIST="/tmp/apt-ipfs.list"
 ADDLIST="/tmp/ipfs-add.list"
 _MAXNUM=5
-_MAXCONPERSRV=10
+_MAXCONPERSRV=5
 _SPLITCON=8
 _MINSPLITSZ="1M"
 _PIECEALGO="default"
