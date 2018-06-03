@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# apt-ipfs v0.1
+# apt-ipfs v0.2
 # Use this just like aptitude or apt-get for faster package downloading.
 #
 # Copyright: 2008-2012 Matt Parnell, http://www.mattparnell.com
