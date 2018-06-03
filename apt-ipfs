@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# apt-ipfs v0.1
+# apt-ipfs v0.2
 # Use this just like aptitude or apt-get for faster package downloading.
 #
 # Copyright: 2008-2012 Matt Parnell, http://www.mattparnell.com
@@ -66,6 +66,7 @@ done
 TMP_RANDOM="13979853562951413"
 TMP_LCK_FILE="${LCK_FILE-${TMP_RANDOM}}"
 TMP_DOWNLOADBEFORE="${DOWNLOADBEFORE-${TMP_RANDOM}}"
+TMP_IPFSFALLBACK="${IPFSFALLBACK-${TMP_RANDOM}}"
 TMP__APTMGR="${_APTMGR-${TMP_RANDOM}}"
 TMP_APTCACHE="${APTCACHE-${TMP_RANDOM}}"
 TMP_DLDIR="${DLDIR-${TMP_RANDOM}}"
@@ -89,6 +90,7 @@ if [ "$root" = 1 ] && [ "$UID" != 0 ]; then
   exec sudo DEBUG="$DEBUG" \
             LCK_FILE="$TMP_LCK_FILE" \
             DOWNLOADBEFORE="$TMP_DOWNLOADBEFORE" \
+            IPFSFALLBACK="$TMP_IPFSFALLBACK" \
             _APTMGR="$TMP__APTMGR" \
             APTCACHE="$TMP_APTCACHE" \
             DLDIR="$TMP_DLDIR" \
@@ -144,6 +146,9 @@ _IPFS_PATH=ipfs
 #ipfs key
 _IPFS_KEY=self
 
+#IPFS fallback
+IPFSFALLBACK=true
+
 # Prefix in front of apt-ipfs output:
 aptipfs_prefix=
 # aptipfs_prefix="$(date '+%b %_d %T.%N') apt-ipfs: "
@@ -182,6 +187,7 @@ https_proxy=
 # 'random' string).
 [ "$TMP_LCK_FILE" = "$TMP_RANDOM" ] || LCK_FILE="$TMP_LCK_FILE"
 [ "$TMP_DOWNLOADBEFORE" = "$TMP_RANDOM" ] || DOWNLOADBEFORE="$TMP_DOWNLOADBEFORE"
+[ "$TMP_IPFSFALLBACK" = "$TMP_RANDOM" ] || IPFSFALLBACK="$TMP_IPFSFALLBACK"
 [ "$TMP__APTMGR" = "$TMP_RANDOM" ] || _APTMGR="$TMP__APTMGR"
 [ "$TMP_APTCACHE" = "$TMP_RANDOM" ] || APTCACHE="$TMP_APTCACHE"
 [ "$TMP_DLDIR" = "$TMP_RANDOM" ] || DLDIR="$TMP_DLDIR"
@@ -317,7 +323,11 @@ get_ipfs_mirrors(){
       fi
       response=$(curl --write-out %{http_code} --head --silent --output /dev/null "$pkg_url")
       if [[ "$response" -eq 200 ]]; then 
-        echo -e "$pkg_url\\t$pkg_url\\t$pkg_url\\t$pkg_url\\t$1"
+        if [ "$IPFSFALLBACK" == "true" ]; then 
+          echo -e "$pkg_url\\t$pkg_url\\t$pkg_url\\t$pkg_url\\t$1"
+        else
+          echo -e "$pkg_url"
+        fi
         return 0
       elif [[ "$response" -eq 404 ]]; then
         echo $(echo "$mirror" | grep -oe "/ipns/.*") >> $ADDLIST
