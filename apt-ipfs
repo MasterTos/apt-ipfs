@@ -323,7 +323,7 @@ get_ipfs_mirrors(){
       fi
       response=$(curl --write-out %{http_code} --head --silent --output /dev/null "$pkg_url")
       if [[ "$response" -eq 200 ]]; then 
-        if ["$IPFSFALLBACK" == true]; then 
+        if [ "$IPFSFALLBACK" ]; then 
           echo -e "$pkg_url\\t$pkg_url\\t$pkg_url\\t$pkg_url\\t$1"
         else
           echo -e "$pkg_url"
