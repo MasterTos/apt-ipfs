@@ -10,7 +10,11 @@
 # Public License as published by the Free Software Foundation; either
 # version 3 of the License, or (at your option) any later version.
 #
-[ -n "$DEBUG" ] && set -xv
+N=`date +%s%N`
+export PS4='+[$(((`date +%s%N`-$N)/1000000))ms][${BASH_SOURCE}:${LINENO}]: ${FUNCNAME[0]:+${FUNCNAME[0]}(): }';
+DEBUG="1"
+
+[ -n "$DEBUG" ] && set -x
 
 # Print colored messages.
 # Usage: msg "message text" "message type" "optional: err"
@@ -496,6 +500,7 @@ get_uris(){
       #get_mirrors "$uri"
       get_ipfs_mirrors "$uri"
       #echo " dir=$DLDIR"
+      hash_algo=
       if [ -n "$hash_algo" ]; then
         echo " checksum=$hash_algo=$checksum"
       fi
