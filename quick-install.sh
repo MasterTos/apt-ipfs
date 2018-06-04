@@ -7,10 +7,10 @@ apt_ipfs_installation() {
     sudo apt-get install -y aria2
   fi
 
-  wget https://raw.githubusercontent.com/mastertos/apt-ipfs/master/apt-ipfs -O /usr/local/sbin/apt-ipfs
+  wget https://raw.githubusercontent.com/mastertos/apt-ipfs/test/apt-ipfs -O /usr/local/sbin/apt-ipfs
   chmod +x /usr/local/sbin/apt-ipfs
   if ! [[ -f /etc/apt-ipfs.conf ]]; then
-    wget https://raw.githubusercontent.com/mastertos/apt-ipfs/master/apt-ipfs.conf -O /etc/apt-ipfs.conf
+    wget https://raw.githubusercontent.com/mastertos/apt-ipfs/test/apt-ipfs.conf -O /etc/apt-ipfs.conf
   fi
 }
 
