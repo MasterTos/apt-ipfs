@@ -325,7 +325,7 @@ get_ipfs_mirrors(){
       else
         pkg_url="$(echo "$mirror"/"$uri_path")"
       fi
-      response=$(curl --write-out %{http_code} --head --silent --output /dev/null "$pkg_url")
+      response=$(curl --max-time 30 --write-out %{http_code} --head --silent --output /dev/null "$pkg_url")
       if [[ "$response" -eq 200 ]]; then 
         if [ "$IPFSFALLBACK" == "true" ]; then 
           echo -e "$pkg_url\\t$pkg_url\\t$pkg_url\\t$pkg_url\\t$1"
@@ -337,6 +337,8 @@ get_ipfs_mirrors(){
         echo $(echo "$mirror" | grep -oe "/ipns/.*") >> $ADDLIST
         echo $uri_path >> $ADDLIST
         echo $(echo "$uri_path" | rev | cut -d'/' -f 1 | rev) >> $ADDLIST
+      else
+        break
       fi
     done
   done
